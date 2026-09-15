@@ -2,20 +2,20 @@
 using UnityEngine;
 using Zenject;
 
-public class WeatherPresenter : MonoBehaviour
+public class WeatherPresenter : MonoBehaviour, IInitializable
 {
     [SerializeField] private WeatherView _view;
 
     [Inject] private RequestQueue _requestQueue;
     [Inject] private WeatherModel _weatherModel;
 
-    private void OnEnable()
+    public void Initialize()
     {
         _weatherModel.OnDataLoaded += OnWeatherDataLoaded;
         LoadWeatherData();
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         _weatherModel.OnDataLoaded -= OnWeatherDataLoaded;
     }
@@ -23,10 +23,7 @@ public class WeatherPresenter : MonoBehaviour
     private void LoadWeatherData()
     {
         var request = new StubWeatherRequest();
-        _requestQueue.Enqueue(request, onComplete: () =>
-        {
-            // Data will be set by the request itself
-        });
+        _requestQueue.Enqueue(request, onComplete: () => { });
     }
 
     private void OnWeatherDataLoaded()

@@ -35,7 +35,9 @@ public class ClickerView : MonoBehaviour
         _buttonVFX?.PlayPressAnimation();
 
         // 4.4 Sound
-        _soundSource?.Play();
+        
+        Debug.LogWarning("не забыть!");
+        //_soundSource?.Play();
     }
 
     private void SpawnParticles()

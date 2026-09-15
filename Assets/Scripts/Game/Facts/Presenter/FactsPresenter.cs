@@ -2,20 +2,20 @@
 using UnityEngine;
 using Zenject;
 
-public class FactsPresenter : MonoBehaviour
+public class FactsPresenter : MonoBehaviour, IInitializable
 {
     [SerializeField] private FactsView _view;
 
     [Inject] private RequestQueue _requestQueue;
     [Inject] private FactsModel _factsModel;
 
-    private void OnEnable()
+    public void Initialize()
     {
         _factsModel.OnDataLoaded += OnFactsDataLoaded;
         LoadFactsData();
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         _factsModel.OnDataLoaded -= OnFactsDataLoaded;
     }

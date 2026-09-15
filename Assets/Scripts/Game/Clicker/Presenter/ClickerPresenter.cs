@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
-public class ClickerPresenter : MonoBehaviour
+public class ClickerPresenter : MonoBehaviour, IInitializable
 {
     [SerializeField] private ClickerView _view;
     [SerializeField] private CurrencyCounterView _currencyCounterView;
@@ -13,13 +13,9 @@ public class ClickerPresenter : MonoBehaviour
     [Inject] private EnergyModel _energyModel;
     [Inject] private GameConfig _config;
 
-    private void Awake()
+    public void Initialize()
     {
         _view.Setup();
-    }
-
-    private void OnEnable()
-    {
         _view.OnButtonClicked += OnButtonClick;
         _clickerModel.OnCurrencyChanged += OnCurrencyChanged;
         _energyModel.OnEnergyChanged += OnEnergyChanged;
@@ -32,7 +28,7 @@ public class ClickerPresenter : MonoBehaviour
         StartAutoCollectLoop();
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         _view.OnButtonClicked -= OnButtonClick;
         _clickerModel.OnCurrencyChanged -= OnCurrencyChanged;
