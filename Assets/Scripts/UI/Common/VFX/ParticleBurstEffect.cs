@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.ParticleSystemRenderer;
 
 [RequireComponent(typeof(ParticleSystem))]
 public class ParticleBurstEffect : MonoBehaviour

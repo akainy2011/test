@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
+using Object = UnityEngine.Object;
 
 // Stub weather request for demonstration
 public class StubWeatherRequest : IQueuedRequest<List<WeatherData>>
 {
     public string Id => "StubWeatherRequest";
+    UniTask IQueuedRequest.Execute()
+    {
+        return Execute();
+    }
 
     public async UniTask<List<WeatherData>> Execute()
     {
@@ -21,7 +25,7 @@ public class StubWeatherRequest : IQueuedRequest<List<WeatherData>>
         };
 
         // Set data to model
-        var weatherModel = UnityEngine.Object.FindObjectOfType<WeatherModel>();
+        var weatherModel = Object.FindObjectOfType<WeatherModel>();
         weatherModel?.SetData(data.ToArray());
 
         return data;

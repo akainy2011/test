@@ -1,5 +1,2 @@
-﻿public interface IPool<T> where T : MonoBehaviour
-{
-    T GetObject();
-    void ReturnObject(T obj);
-}
+﻿// Disabled - functionality moved to ObjectPoolManager.cs
+// This file is kept to avoid Unity import issues

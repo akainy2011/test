@@ -1,8 +1,9 @@
-﻿using Zenject;
+﻿using UnityEngine;
+using Zenject;
 
 public class GameConfigInstaller : Installer
 {
-    [SerializeField] private GameConfig _gameConfig;
+    [SerializeField] public GameConfig _gameConfig;
 
     public override void InstallBindings()
     {

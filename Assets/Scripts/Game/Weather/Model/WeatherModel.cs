@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 public class WeatherData
 {
@@ -7,7 +8,7 @@ public class WeatherData
     public string Icon { get; set; }
 }
 
-public class WeatherModel
+public class WeatherModel : MonoBehaviour
 {
     public event Action OnDataLoaded;
     private WeatherData[] _data;

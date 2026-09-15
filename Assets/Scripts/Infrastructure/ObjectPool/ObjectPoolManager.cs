@@ -2,50 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPoolManager
-{
-    private readonly Dictionary<Type, ObjectPoolBase> _pools = new();
-    private readonly Transform _parent;
-
-    public ObjectPoolManager(Transform parent = null)
-    {
-        _parent = parent;
-    }
-
-    public void Register<T>(T prefab, int initialCount = 5) where T : MonoBehaviour
-    {
-        var pool = new ObjectPoolBase(prefab, _parent);
-        _pools[typeof(T)] = pool;
-
-        // Pre-instantiate
-        for (int i = 0; i < initialCount; i++)
-        {
-            pool.GetObject();
-            pool.ReturnObject(pool.GetLastObject());
-        }
-    }
-
-    public T Get<T>() where T : MonoBehaviour
-    {
-        if (!_pools.TryGetValue(typeof(T), out var pool))
-        {
-            Debug.LogWarning($"[ObjectPoolManager] Pool not registered for {typeof(T).Name}");
-            return null;
-        }
-        return (T)pool.GetObject();
-    }
-
-    public void Return<T>(T obj) where T : MonoBehaviour
-    {
-        if (!_pools.TryGetValue(typeof(T), out var pool))
-        {
-            Debug.LogWarning($"[ObjectPoolManager] No pool for {typeof(T).Name}");
-            return;
-        }
-        pool.ReturnObject(obj);
-    }
-}
-
+// Base class defined first so it's available to ObjectPoolManager
 public abstract class ObjectPoolBase
 {
     protected readonly Queue<MonoBehaviour> _pool = new();
@@ -103,4 +60,49 @@ public class ObjectPool<T> : ObjectPoolBase where T : MonoBehaviour
 
     public T GetTyped() => (T)GetObject();
     public void ReturnTyped(T obj) => ReturnObject(obj);
+}
+
+// Manager defined after base classes
+public class ObjectPoolManager
+{
+    private readonly Dictionary<Type, ObjectPoolBase> _pools = new();
+    private readonly Transform _parent;
+
+    public ObjectPoolManager(Transform parent = null)
+    {
+        _parent = parent;
+    }
+
+    public void Register<T>(T prefab, int initialCount = 5) where T : MonoBehaviour
+    {
+        var pool = new ObjectPool<T>(prefab, _parent);
+        _pools[typeof(T)] = pool;
+
+        // Pre-instantiate
+        for (int i = 0; i < initialCount; i++)
+        {
+            pool.GetObject();
+            pool.ReturnTyped(pool.GetTyped());
+        }
+    }
+
+    public T Get<T>() where T : MonoBehaviour
+    {
+        if (!_pools.TryGetValue(typeof(T), out var pool))
+        {
+            Debug.LogWarning($"[ObjectPoolManager] Pool not registered for {typeof(T).Name}");
+            return null;
+        }
+        return ((ObjectPool<T>)pool).GetTyped();
+    }
+
+    public void Return<T>(T obj) where T : MonoBehaviour
+    {
+        if (!_pools.TryGetValue(typeof(T), out var pool))
+        {
+            Debug.LogWarning($"[ObjectPoolManager] No pool for {typeof(T).Name}");
+            return;
+        }
+        ((ObjectPool<T>)pool).ReturnTyped(obj);
+    }
 }

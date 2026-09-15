@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "GameConfig", menuName = "Game/Game Config")]
+[CreateAssetMenu(fileName = "GameConfig", menuName = "Game Config")]
 public class GameConfig : ScriptableObject
 {
     [Header("Tap Settings")]

@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Zenject;
 
 public class ClickerView : MonoBehaviour
 {
@@ -12,8 +13,6 @@ public class ClickerView : MonoBehaviour
 
     [SerializeField] private Button _button;
     [SerializeField] private RectTransform _buttonRect;
-    [SerializeField] private ParticleBurstEffect _particlePrefab;
-    [SerializeField] private FloatingCurrencyText _floatingTextPrefab;
     [SerializeField] private AudioSource _soundSource;
 
     private ButtonPressVFX _buttonVFX;
@@ -44,7 +43,7 @@ public class ClickerView : MonoBehaviour
         var particle = _poolManager.Get<ParticleBurstEffect>();
         if (particle != null)
         {
-            particle.transform.position = _buttonRect.position;
+            particle.transform.position = _buttonRect.transform.position;
             particle.Play();
         }
     }
@@ -54,7 +53,7 @@ public class ClickerView : MonoBehaviour
         var floatingText = _poolManager.Get<FloatingCurrencyText>();
         if (floatingText != null)
         {
-            floatingText.transform.position = _buttonRect.position;
+            floatingText.transform.position = _buttonRect.transform.position;
             floatingText.Init($"+{reward}");
         }
     }

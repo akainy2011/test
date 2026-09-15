@@ -7,20 +7,23 @@ public class AppBootstrap : MonoBehaviour
 
     void Start()
     {
-        var context = gameObject.AddComponent<DiContext>();
-        var installer = gameObject.AddComponent<AppInstaller>();
+        var container = new DiContainer();
 
-        // Загрузка GameConfig из Resources если не назначен в Inspector
+        // Bind GameConfig first
         if (_gameConfig == null)
         {
             _gameConfig = Resources.Load<GameConfig>("GameConfig");
         }
-
         if (_gameConfig != null)
         {
-            installer._gameConfig = _gameConfig;
+            container.Bind<GameConfig>().FromInstance(_gameConfig).AsSingle();
         }
 
-        ZenjectInstaller.Install(typeof(AppInstaller), context);
+        // Manual POCO bindings (no Installer dependency)
+        container.Bind<RequestQueue>().AsSingle();
+        container.Bind<ClickerModel>().AsSingle();
+        container.Bind<EnergyModel>().AsSingle();
+        container.Bind<WeatherModel>().AsSingle();
+        container.Bind<FactsModel>().AsSingle();
     }
 }

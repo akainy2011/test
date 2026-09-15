@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
+using Object = UnityEngine.Object;
 
 // Stub facts request for demonstration
 public class StubFactsRequest : IQueuedRequest<List<FactData>>
 {
     public string Id => "StubFactsRequest";
+    UniTask IQueuedRequest.Execute()
+    {
+        return Execute();
+    }
 
     public async UniTask<List<FactData>> Execute()
     {
@@ -21,7 +25,7 @@ public class StubFactsRequest : IQueuedRequest<List<FactData>>
         };
 
         // Set data to model
-        var factsModel = UnityEngine.Object.FindObjectOfType<FactsModel>();
+        var factsModel = Object.FindObjectOfType<FactsModel>();
         factsModel?.SetData(data.ToArray());
 
         return data;
