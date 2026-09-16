@@ -1,8 +1,7 @@
 ﻿using System;
-using TMPro;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 using Zenject;
 
 public class ClickerView : MonoBehaviour
@@ -13,8 +12,9 @@ public class ClickerView : MonoBehaviour
 
     [SerializeField] private Button _button;
     [SerializeField] private RectTransform _buttonRect;
-    [SerializeField] private AudioSource _soundSource;
     [SerializeField] private ParticleBurstEffect _particle;
+    [SerializeField] private Transform _animPlace;
+    [SerializeField] private CurrencyAnimItem _currencyAnimItem;
 
     private ButtonPressVFX _buttonVFX;
 
@@ -22,24 +22,18 @@ public class ClickerView : MonoBehaviour
     {
         _buttonVFX = _buttonRect.GetComponent<ButtonPressVFX>();
         _button.onClick.AddListener(() => OnButtonClicked?.Invoke(false));
-        _poolManager.Register(_particle, _button.transform);
+        _poolManager.Register(_particle, _animPlace, 0);
+        _poolManager.Register(_currencyAnimItem, _animPlace, 0);
     }
 
     public void TriggerVFX(int reward)
     {
-        // 4.1 Particle burst
+       
         SpawnParticles();
-
-        // 4.2 Floating currency text
-        SpawnFloatingText(reward);
-
-        // 4.3 Button press animation
-        _buttonVFX?.PlayPressAnimation();
-
-        // 4.4 Sound
         
-        Debug.LogWarning("не забыть!");
-        //_soundSource?.Play();
+        ShowCurrencyAnimItem(reward);
+       
+        _buttonVFX?.PlayPressAnimation();
     }
 
     private void SpawnParticles()
@@ -49,16 +43,31 @@ public class ClickerView : MonoBehaviour
         {
             particle.transform.position = _buttonRect.transform.position;
             particle.Play();
+            ReturnParticleToPool(particle);
         }
     }
 
-    private void SpawnFloatingText(int reward)
+    private async UniTaskVoid ReturnParticleToPool(ParticleBurstEffect particle)
     {
-        var floatingText = _poolManager.Get<FloatingCurrencyText>();
+        await UniTask.WaitForSeconds(2);
+        particle.gameObject.SetActive(false);
+        _poolManager.Return(particle);
+    }
+
+    private void ShowCurrencyAnimItem(int reward)
+    {
+        var floatingText = _poolManager.Get<CurrencyAnimItem>();
         if (floatingText != null)
         {
+            floatingText.gameObject.SetActive(true);
             floatingText.transform.position = _buttonRect.transform.position;
-            floatingText.Init($"+{reward}");
+            floatingText.Init($"+{reward}", OnFlyDone);
+        }
+
+        void OnFlyDone()
+        {
+            floatingText.gameObject.SetActive(false);
+            _poolManager.Return(floatingText);
         }
     }
 }

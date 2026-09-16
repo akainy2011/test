@@ -5,6 +5,7 @@ public class ButtonPressVFX : MonoBehaviour
 {
     [SerializeField] private float _scaleDown = 0.9f;
     [SerializeField] private float _pressDuration = 0.1f;
+    [SerializeField] private AudioSource _soundSource;
     private RectTransform _rectTransform;
 
     private void Awake()
@@ -16,6 +17,8 @@ public class ButtonPressVFX : MonoBehaviour
     {
         var currentScale = _rectTransform.localScale;
         var pressedScale = currentScale * _scaleDown;
+        
+        _soundSource.Play();
 
         DOTween.To(() => _rectTransform.localScale, x => _rectTransform.localScale = x,
             pressedScale, _pressDuration)

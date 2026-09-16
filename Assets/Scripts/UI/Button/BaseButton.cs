@@ -15,7 +15,6 @@ public class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private Action _clickHandler;
 
     private bool _isPointerDown;
-    private bool _clickSfxEnabled = true;
 
 #if UNITY_EDITOR
     private void Awake()
@@ -70,12 +69,16 @@ public class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         if (Input.touchCount > 1)
             return;
         
-        if (_clickSfxEnabled)
-            _clickSound.Play();
+        PlaySound();
        
         PerformOnClick();
 
         _clickHandler?.Invoke();
+    }
+    
+    public  void PlaySound()
+    {
+        _clickSound.Play();
     }
 
     // позволяет наследному классу выполнять некоторое стандартное действие при клике по любой кнопке этого класса
@@ -99,9 +102,6 @@ public class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         _buttonBody.transform.localScale = isDown ? BODY_DOWN_SCALE : BODY_NORMAL_SCALE;
     }
-
-
-    public void DisableClickSfx() => _clickSfxEnabled = false;
 
     private void OnDestroy()
     {
