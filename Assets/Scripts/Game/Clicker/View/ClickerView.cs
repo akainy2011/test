@@ -14,6 +14,7 @@ public class ClickerView : MonoBehaviour
     [SerializeField] private Button _button;
     [SerializeField] private RectTransform _buttonRect;
     [SerializeField] private AudioSource _soundSource;
+    [SerializeField] private ParticleBurstEffect _particle;
 
     private ButtonPressVFX _buttonVFX;
 
@@ -21,6 +22,7 @@ public class ClickerView : MonoBehaviour
     {
         _buttonVFX = _buttonRect.GetComponent<ButtonPressVFX>();
         _button.onClick.AddListener(() => OnButtonClicked?.Invoke(false));
+        _poolManager.Register(_particle, _button.transform);
     }
 
     public void TriggerVFX(int reward)

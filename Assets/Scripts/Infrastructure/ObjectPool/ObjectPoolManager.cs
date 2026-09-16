@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Base class defined first so it's available to ObjectPoolManager
 public abstract class ObjectPoolBase
 {
     protected readonly Queue<MonoBehaviour> _pool = new();
@@ -66,15 +65,16 @@ public class ObjectPool<T> : ObjectPoolBase where T : MonoBehaviour
 public class ObjectPoolManager
 {
     private readonly Dictionary<Type, ObjectPoolBase> _pools = new();
-    private readonly Transform _parent;
+    private Transform _parent;
 
-    public ObjectPoolManager(Transform parent = null)
+    public ObjectPoolManager()
     {
-        _parent = parent;
+        
     }
 
-    public void Register<T>(T prefab, int initialCount = 5) where T : MonoBehaviour
+    public void Register<T>(T prefab, Transform parent, int initialCount = 5) where T : MonoBehaviour
     {
+        _parent = parent;
         var pool = new ObjectPool<T>(prefab, _parent);
         _pools[typeof(T)] = pool;
 

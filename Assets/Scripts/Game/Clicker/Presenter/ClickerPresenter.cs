@@ -20,11 +20,11 @@ public class ClickerPresenter : MonoBehaviour, IInitializable
         _clickerModel.OnCurrencyChanged += OnCurrencyChanged;
         _energyModel.OnEnergyChanged += OnEnergyChanged;
 
-        // Initial values
+        
         _currencyCounterView.SetCurrency(_clickerModel.Currency);
         _energyCounterView.SetEnergy(_energyModel.CurrentEnergy, _energyModel.MaxEnergy);
 
-        // Start auto-collect loop
+        
         StartAutoCollectLoop();
     }
 
@@ -45,7 +45,8 @@ public class ClickerPresenter : MonoBehaviour, IInitializable
         var energyCost = isAuto ? _config.AutoCollectEnergyCost : _config.TapEnergyCost;
         var reward = isAuto ? _config.AutoCollectReward : _config.TapReward;
 
-        if (!_energyModel.TrySpendEnergy(energyCost)) return;
+        if (!_energyModel.TrySpendEnergy(energyCost)) 
+            return;
 
         _clickerModel.AddCurrency(reward);
         _view.TriggerVFX(reward);
@@ -63,12 +64,13 @@ public class ClickerPresenter : MonoBehaviour, IInitializable
 
     private async void StartAutoCollectLoop()
     {
-        if (!_config.AutoCollectEnabled) return;
+        if (!_config.AutoCollectEnabled) 
+            return;
 
         while (true)
         {
             await UniTask.Delay(TimeSpan.FromSeconds(_config.AutoCollectInterval));
-            PerformClick(true); // true = auto
+            PerformClick(true);
         }
     }
 }
