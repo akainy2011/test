@@ -24,6 +24,8 @@ public class AppBootstrap : MonoBehaviour
         container.Bind<EnergyModel>().AsSingle();
         container.Bind<WeatherModel>().AsSingle();
         container.Bind<FactsModel>().AsSingle();
+        container.Bind<WeatherApiRequest>().AsSingle();
+        container.Bind<StubFactsRequest>().AsSingle();
         
         var poolManager = new ObjectPoolManager();
         container.Bind<ObjectPoolManager>().FromInstance(poolManager).AsSingle();
@@ -40,14 +42,14 @@ public class AppBootstrap : MonoBehaviour
                 tabNavigator.Initialize(new List<string> { "Кликер", "Погода", "Факты" });
 
             // Initialize all IInitializable components
-            var initializables = diRoot.GetComponentsInChildren<MonoBehaviour>()
-                .OfType<IInitializable>()
-                .ToList();
-            
-            foreach (var initializable in initializables)
-            {
-                initializable.Initialize();
-            }
+            var clickerPresenter = diRoot.GetComponentInChildren<ClickerPresenter>(true);
+            if (clickerPresenter != null) clickerPresenter.Initialize();
+
+            var weatherPresenter = diRoot.GetComponentInChildren<WeatherPresenter>(true);
+            if (weatherPresenter != null) weatherPresenter.Initialize();
+
+            var factsPresenter = diRoot.GetComponentInChildren<FactsPresenter>(true);
+            if (factsPresenter != null) factsPresenter.Initialize();
         }
     }
 }

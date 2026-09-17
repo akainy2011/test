@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 
 public class FactData
 {
@@ -7,7 +6,7 @@ public class FactData
     public string Body { get; set; }
 }
 
-public class FactsModel : MonoBehaviour
+public class FactsModel
 {
     public event Action OnDataLoaded;
     private FactData[] _data;

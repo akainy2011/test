@@ -8,6 +8,7 @@ public class FactsPresenter : MonoBehaviour, IInitializable
 
     [Inject] private RequestQueue _requestQueue;
     [Inject] private FactsModel _factsModel;
+    [Inject] private StubFactsRequest _stubFactsRequest;
 
     public void Initialize()
     {
@@ -22,8 +23,7 @@ public class FactsPresenter : MonoBehaviour, IInitializable
 
     private void LoadFactsData()
     {
-        var request = new StubFactsRequest();
-        _requestQueue.Enqueue(request);
+        _requestQueue.Enqueue(_stubFactsRequest);
     }
 
     private void OnFactsDataLoaded()

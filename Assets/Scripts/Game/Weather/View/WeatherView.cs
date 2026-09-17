@@ -1,24 +1,22 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class WeatherView : MonoBehaviour
 {
-    public event Action OnRefreshRequested;
-
     [SerializeField] private Transform _contentParent;
+    [SerializeField] private Image _iconImage;
+    [SerializeField] private TextMeshProUGUI _temperatureText;
 
-    public void Clear()
+    public void AddWeatherCard(int temperatureF)
     {
-        foreach (Transform child in _contentParent)
-        {
-            Destroy(child.gameObject);
-        }
+        _temperatureText.text = $"Сегодня - {temperatureF}F";
     }
 
-    public void AddWeatherCard(string city, int temperature, string icon)
+    public void SetIcon(Sprite icon)
     {
-        // TODO: Instantiate WeatherCard prefab
-        Debug.Log($"[WeatherView] Add: {city} {temperature}°C [{icon}]");
+        _iconImage.sprite = icon;
     }
 
     public void Show() => gameObject.SetActive(true);

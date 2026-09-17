@@ -1,17 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
-using Object = UnityEngine.Object;
 
 // Stub facts request for demonstration
 public class StubFactsRequest : IQueuedRequest<List<FactData>>
 {
+    private readonly FactsModel _factsModel;
+
     public string Id => "StubFactsRequest";
-    UniTask IQueuedRequest.Execute()
+
+    public StubFactsRequest(FactsModel factsModel)
     {
-        return Execute();
+        _factsModel = factsModel;
     }
 
+    public UniTask<List<FactData>> Execute(CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    UniTask IQueuedRequest.Execute(CancellationToken cancellationToken)
+    {
+        return Execute(cancellationToken);
+    }
+    
     public async UniTask<List<FactData>> Execute()
     {
         // Simulate network delay
@@ -25,8 +38,7 @@ public class StubFactsRequest : IQueuedRequest<List<FactData>>
         };
 
         // Set data to model
-        var factsModel = Object.FindObjectOfType<FactsModel>();
-        factsModel?.SetData(data.ToArray());
+        _factsModel.SetData(data.ToArray());
 
         return data;
     }
