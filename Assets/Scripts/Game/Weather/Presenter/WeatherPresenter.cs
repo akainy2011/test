@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Zenject;
 
-public class WeatherPresenter : MonoBehaviour, IInitializable
+public class WeatherPresenter : BasePresenter
 {
     [SerializeField] private WeatherView _view;
 
@@ -14,25 +14,33 @@ public class WeatherPresenter : MonoBehaviour, IInitializable
 
     private bool _isTabActive;
     private WeatherData _lastData;
-
-    public void Initialize()
+   
+    
+    public override void Activate()
     {
+        _view.Show();
         _weatherModel.OnDataLoaded += OnWeatherDataLoaded;
         _isTabActive = true;
         LoadWeatherData();
         StartWeatherLoop();
     }
+    
+    public override void Deactivate()
+    {
+        _view.Hide();
+        _isTabActive = false;
+        _weatherModel.OnDataLoaded -= OnWeatherDataLoaded;
+        _requestQueue.CancelAllOfType<WeatherApiRequest>();
+    }
 
     private void OnDestroy()
     {
-        _isTabActive = false;
-        _weatherModel.OnDataLoaded -= OnWeatherDataLoaded;
-        _requestQueue.CancelRequest("WeatherApiRequest");
+        Deactivate();
     }
 
     private void StartWeatherLoop()
     {
-        _ = WeatherLoop();
+        WeatherLoop();
     }
 
     private async UniTaskVoid WeatherLoop()

@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class TabNavigator : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> _tabContents = new();
+    [SerializeField] private List<BasePresenter> _tabContents = new();
     [SerializeField] private List<TabButton> _tabButtons = new();
-
-    public event Action<int> OnTabChanged;
 
     private int _currentTab = 0;
 
@@ -19,7 +17,7 @@ public class TabNavigator : MonoBehaviour
             _tabButtons[i].Setup(i, label, OnTabButtonClicked);
         }
 
-        SwitchTab(0, false);
+        SwitchTab(0);
     }
 
     private void OnTabButtonClicked(int index)
@@ -27,7 +25,7 @@ public class TabNavigator : MonoBehaviour
         SwitchTab(index);
     }
 
-    public void SwitchTab(int index, bool notify = true)
+    public void SwitchTab(int index)
     {
         if (index < 0 || index >= _tabContents.Count) return;
 
@@ -35,16 +33,14 @@ public class TabNavigator : MonoBehaviour
 
         for (int i = 0; i < _tabContents.Count; i++)
         {
-            _tabContents[i].SetActive(i == index);
+            if(i == index)
+                _tabContents[i].Activate();
+            else
+                _tabContents[i].Deactivate();
             if (i < _tabButtons.Count)
                 _tabButtons[i].SetActive(i == index);
         }
-
-        if (notify)
-        {
-            OnTabChanged?.Invoke(index);
-        }
+     
     }
 
-    public int CurrentTab => _currentTab;
 }

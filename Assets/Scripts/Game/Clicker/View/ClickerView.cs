@@ -28,11 +28,8 @@ public class ClickerView : MonoBehaviour
 
     public void TriggerVFX(int reward)
     {
-       
         SpawnParticles();
-        
         ShowCurrencyAnimItem(reward);
-       
         _buttonVFX?.PlayPressAnimation();
     }
 
@@ -70,4 +67,7 @@ public class ClickerView : MonoBehaviour
             _poolManager.Return(floatingText);
         }
     }
+    
+    public void Show() => gameObject.SetActive(true);
+    public void Hide() => gameObject.SetActive(false);
 }

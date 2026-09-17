@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using Cysharp.Threading.Tasks;
+
 
 public class RequestQueue
 {
@@ -9,31 +9,27 @@ public class RequestQueue
     private bool _isProcessing;
     private CancellationTokenSource _currentCts;
 
+    private Type _currentRequestType;
+
     public void Enqueue(IQueuedRequest request, Action onComplete = null, Action<Exception> onError = null)
     {
         _queue.Enqueue((request, onComplete, onError));
         ProcessNext();
     }
 
-    public void CancelRequest(string id)
+    
+    public void CancelAllOfType<T>() where T : IQueuedRequest
     {
-        // Перестроить очередь без нужного запроса
+        var type = typeof(T);
         var filtered = new Queue<(IQueuedRequest, Action, Action<Exception>)>();
         foreach (var item in _queue)
         {
-            if (item.Request.Id != id)
+            if (item.Request.GetType() != type)
                 filtered.Enqueue(item);
         }
         _queue = filtered;
-
-        // Отменить текущий запрос
-        _currentCts?.Cancel();
-    }
-
-    public void CancelAll()
-    {
-        _queue.Clear();
-        _currentCts?.Cancel();
+        if (_currentRequestType != null && _currentRequestType == type)
+            _currentCts?.Cancel();
     }
 
     private async void ProcessNext()
@@ -44,22 +40,24 @@ public class RequestQueue
         while (_queue.Count > 0)
         {
             var (request, onComplete, onError) = _queue.Dequeue();
-
-            // Create new CTS for each request
+          
             _currentCts = new CancellationTokenSource();
             var cts = _currentCts;
 
             try
             {
+                _currentRequestType = request.GetType();
                 await request.Execute(cts.Token);
+                _currentRequestType = null;
                 onComplete?.Invoke();
             }
             catch (OperationCanceledException)
             {
-                // Request was cancelled — ignore
+                _currentRequestType = null;
             }
             catch (Exception ex)
             {
+                _currentRequestType = null;
                 onError?.Invoke(ex);
             }
         }

@@ -23,9 +23,9 @@ public class AppBootstrap : MonoBehaviour
         container.Bind<ClickerModel>().AsSingle();
         container.Bind<EnergyModel>().AsSingle();
         container.Bind<WeatherModel>().AsSingle();
-        container.Bind<FactsModel>().AsSingle();
+        container.Bind<DogsModel>().AsSingle();
         container.Bind<WeatherApiRequest>().AsSingle();
-        container.Bind<StubFactsRequest>().AsSingle();
+        container.Bind<GetBreedsRequest>().AsSingle();
         
         var poolManager = new ObjectPoolManager();
         container.Bind<ObjectPoolManager>().FromInstance(poolManager).AsSingle();
@@ -41,21 +41,28 @@ public class AppBootstrap : MonoBehaviour
             if (tabNavigator != null)
                 tabNavigator.Initialize(new List<string> { "Кликер", "Погода", "Факты" });
 
-            // Initialize all IInitializable components
+            
             var clickerPresenter = diRoot.GetComponentInChildren<ClickerPresenter>(true);
             if (clickerPresenter != null) clickerPresenter.Initialize();
-
-            var weatherPresenter = diRoot.GetComponentInChildren<WeatherPresenter>(true);
-            if (weatherPresenter != null) weatherPresenter.Initialize();
-
-            var factsPresenter = diRoot.GetComponentInChildren<FactsPresenter>(true);
-            if (factsPresenter != null) factsPresenter.Initialize();
         }
     }
 }
 
 // Simple IInitializable interface (not Zenject's)
-public interface IInitializable
+public class BasePresenter: MonoBehaviour
 {
-    void Initialize();
+    public virtual void Initialize()
+    {
+        
+    }
+
+    public virtual void Activate()
+    {
+       
+    }
+
+    public virtual void Deactivate()
+    {
+        
+    }
 }

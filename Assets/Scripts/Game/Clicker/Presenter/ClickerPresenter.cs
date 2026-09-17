@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
-public class ClickerPresenter : MonoBehaviour, IInitializable
+public class ClickerPresenter : BasePresenter
 {
     [SerializeField] private ClickerView _view;
     [SerializeField] private CurrencyCounterView _currencyCounterView;
@@ -12,27 +12,38 @@ public class ClickerPresenter : MonoBehaviour, IInitializable
     [Inject] private ClickerModel _clickerModel;
     [Inject] private EnergyModel _energyModel;
     [Inject] private GameConfig _config;
+    
+    private bool _isTabActive;
 
-    public void Initialize()
+    public override void Initialize()
     {
         _view.Setup();
+        StartAutoCollectLoop();
+    }
+
+    public override void Activate()
+    {
+        _isTabActive = true;
         _view.OnButtonClicked += OnButtonClick;
         _clickerModel.OnCurrencyChanged += OnCurrencyChanged;
         _energyModel.OnEnergyChanged += OnEnergyChanged;
-
-        
         _currencyCounterView.SetCurrency(_clickerModel.Currency);
         _energyCounterView.SetEnergy(_energyModel.CurrentEnergy, _energyModel.MaxEnergy);
-
-        
-        StartAutoCollectLoop();
+        _view.Show();
+    }
+    
+    public override void Deactivate()
+    {
+        _view.Hide();
+        _isTabActive = false;
+        _view.OnButtonClicked -= OnButtonClick;
+        _clickerModel.OnCurrencyChanged -= OnCurrencyChanged;
+        _energyModel.OnEnergyChanged -= OnEnergyChanged;
     }
 
     private void OnDestroy()
     {
-        _view.OnButtonClicked -= OnButtonClick;
-        _clickerModel.OnCurrencyChanged -= OnCurrencyChanged;
-        _energyModel.OnEnergyChanged -= OnEnergyChanged;
+        Deactivate();
     }
 
     private void OnButtonClick(bool isAuto)
@@ -49,7 +60,9 @@ public class ClickerPresenter : MonoBehaviour, IInitializable
             return;
 
         _clickerModel.AddCurrency(reward);
-        _view.TriggerVFX(reward);
+        
+        if (_isTabActive)
+            _view.TriggerVFX(reward);
     }
 
     private void OnCurrencyChanged(int currency)

@@ -24,6 +24,6 @@ public class TabButton : TextButton
        if(active)
            Lock();
        else
-        Unlock();
+           Unlock();
     }
 }

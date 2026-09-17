@@ -18,7 +18,7 @@ MonoBehaviour:
   AutoCollectInterval: 3
   AutoCollectReward: 1
   AutoCollectEnergyCost: 1
-  MaxEnergy: 10
+  MaxEnergy: 100
   EnergyRefillAmount: 10
   EnergyRefillInterval: 10
   FloatingTextDuration: 1
