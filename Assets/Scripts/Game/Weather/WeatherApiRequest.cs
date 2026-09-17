@@ -26,8 +26,7 @@ public class WeatherApiRequest : IQueuedRequest<List<WeatherData>>
         using var request = UnityWebRequest.Get(ApiUrl);
         request.timeout = 10;
         var operation = request.SendWebRequest();
-
-        // Отслеживание отмены во время запроса
+     
         while (!operation.isDone && !cancellationToken.IsCancellationRequested)
         {
             await UniTask.Yield(cancellationToken: cancellationToken);
@@ -44,8 +43,7 @@ public class WeatherApiRequest : IQueuedRequest<List<WeatherData>>
 
         var response = JsonUtility.FromJson<WeatherForecastResponse>(request.downloadHandler.text);
         var data = ParseForecast(response);
-
-        // Set data to model
+        
         _weatherModel.SetData(data.ToArray());
 
         return data;

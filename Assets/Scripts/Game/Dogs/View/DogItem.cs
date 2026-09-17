@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class DogItem : MonoBehaviour
 { 
-    [SerializeField] private GameObject _loadingIndicator;
+    [SerializeField] private Animator _loadingIndicator;
     [SerializeField] private TMP_Text _label;
     [SerializeField] private Button _button;
 
@@ -16,18 +16,19 @@ public class DogItem : MonoBehaviour
         _id = id;
         _label.text = name;
         _button.onClick.AddListener(() => OnBreedSelected?.Invoke(id));
-        _loadingIndicator?.SetActive(false);
+        _loadingIndicator.gameObject.SetActive(false);
     }
     
     public string ID => _id;
 
     public void ShowLoading()
     {
-        _loadingIndicator?.SetActive(true);
+        _loadingIndicator.gameObject.SetActive(true);
+        _loadingIndicator.Play("Loop");
     }
 
     public void HideLoading()
     {
-        _loadingIndicator?.SetActive(false);
+        _loadingIndicator.gameObject.SetActive(false);
     }
 }

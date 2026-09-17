@@ -9,5 +9,5 @@ public interface IQueuedRequest
 
 public interface IQueuedRequest<T> : IQueuedRequest
 {
-    UniTask<T> Execute(CancellationToken cancellationToken = default);
+    new UniTask<T> Execute(CancellationToken cancellationToken = default);
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class DogBreedView : MonoBehaviour
+public class DogsView : MonoBehaviour
 {
     public event Action<string> OnBreedSelected;
 

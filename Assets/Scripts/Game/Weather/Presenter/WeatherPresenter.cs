@@ -40,7 +40,7 @@ public class WeatherPresenter : BasePresenter
 
     private void StartWeatherLoop()
     {
-        WeatherLoop();
+        _ = WeatherLoop();
     }
 
     private async UniTaskVoid WeatherLoop()
@@ -48,7 +48,8 @@ public class WeatherPresenter : BasePresenter
         while (_isTabActive)
         {
             await UniTask.Delay(TimeSpan.FromSeconds(5));
-            if (!_isTabActive) break;
+            if (!_isTabActive) 
+                break;
             LoadWeatherData();
         }
     }
@@ -68,10 +69,14 @@ public class WeatherPresenter : BasePresenter
             var endTime = DateTime.Parse(data.EndTime);
             if (DateTime.Now >= startTime && DateTime.Now <= endTime)
             {
-                
-                if(_lastData != null && _lastData.Icon == data.Icon && _lastData.TemperatureF == data.TemperatureF)
+
+                if (_lastData != null && _lastData.Icon == data.Icon && _lastData.TemperatureF == data.TemperatureF)
+                {
+                    _view.PlayIdleAnim();
                     return;
-                LoadIconAsync(data);
+                }
+                   
+                _ = LoadIconAsync(data);
                 _view.AddWeatherCard(data.TemperatureF);
                 _lastData = data;
                 return;

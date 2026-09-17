@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 
 [Serializable]
 public class WeatherData
@@ -10,7 +9,7 @@ public class WeatherData
     public string EndTime { get; set; }    
 }
 
-// Классы для сериализации ответа API
+
 [Serializable]
 public class WeatherForecastResponse
 {

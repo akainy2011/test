@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -35,34 +33,13 @@ public class AppBootstrap : MonoBehaviour
         if (diRoot != null)
         {
             container.InjectGameObject(diRoot);
-
             // Initialize TabNavigator
             var tabNavigator = diRoot.GetComponentInChildren<TabNavigator>();
             if (tabNavigator != null)
                 tabNavigator.Initialize(new List<string> { "Кликер", "Погода", "Факты" });
-
             
             var clickerPresenter = diRoot.GetComponentInChildren<ClickerPresenter>(true);
             if (clickerPresenter != null) clickerPresenter.Initialize();
         }
-    }
-}
-
-// Simple IInitializable interface (not Zenject's)
-public class BasePresenter: MonoBehaviour
-{
-    public virtual void Initialize()
-    {
-        
-    }
-
-    public virtual void Activate()
-    {
-       
-    }
-
-    public virtual void Deactivate()
-    {
-        
     }
 }

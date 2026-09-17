@@ -366,6 +366,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca7e1906b851f5f4c966ad059269b1e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _loadingIndicator: {fileID: 4951729485107735393}
+  _loadingIndicator: {fileID: 4838874679211854836}
   _label: {fileID: 3779085012537432738}
   _button: {fileID: 8676643584269508766}

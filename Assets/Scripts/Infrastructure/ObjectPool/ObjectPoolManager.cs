@@ -61,7 +61,6 @@ public class ObjectPool<T> : ObjectPoolBase where T : MonoBehaviour
     public void ReturnTyped(T obj) => ReturnObject(obj);
 }
 
-// Manager defined after base classes
 public class ObjectPoolManager
 {
     private readonly Dictionary<Type, ObjectPoolBase> _pools = new();

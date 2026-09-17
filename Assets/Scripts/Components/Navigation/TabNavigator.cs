@@ -7,7 +7,6 @@ public class TabNavigator : MonoBehaviour
     [SerializeField] private List<BasePresenter> _tabContents = new();
     [SerializeField] private List<TabButton> _tabButtons = new();
 
-    private int _currentTab = 0;
 
     public void Initialize(List<string> tabLabels, Action<int> onTabSelected = null)
     {
@@ -29,8 +28,6 @@ public class TabNavigator : MonoBehaviour
     {
         if (index < 0 || index >= _tabContents.Count) return;
 
-        _currentTab = index;
-
         for (int i = 0; i < _tabContents.Count; i++)
         {
             if(i == index)
@@ -40,7 +37,5 @@ public class TabNavigator : MonoBehaviour
             if (i < _tabButtons.Count)
                 _tabButtons[i].SetActive(i == index);
         }
-     
     }
-
 }

@@ -3,14 +3,13 @@ using Zenject;
 
 public class DogBreedPresenter : BasePresenter
 {
-    [SerializeField] private DogBreedView _view;
+    [SerializeField] private DogsView _view;
     [SerializeField] private DogBreedPopup _popup;
 
     [Inject] private RequestQueue _requestQueue;
     [Inject] private DogsModel _dogsModel;
     [Inject] private GetBreedsRequest _getBreedsRequest;
-
-    private bool _isTabActive;
+  
     
     public override void Activate()
     {
@@ -18,7 +17,6 @@ public class DogBreedPresenter : BasePresenter
         _dogsModel.OnDogsLoaded += OnDogsLoaded;
         _dogsModel.OnBreedDetailLoaded += OnBreedDetailLoaded;
         _view.OnBreedSelected += OnBreedSelected;
-        _isTabActive = true;
         LoadBreeds();
         
     }
@@ -27,7 +25,6 @@ public class DogBreedPresenter : BasePresenter
     {
         _view.Hide();
         _popup.Hide();
-        _isTabActive = false;
         _dogsModel.OnDogsLoaded -= OnDogsLoaded;
         _dogsModel.OnBreedDetailLoaded -= OnBreedDetailLoaded;
         _view.OnBreedSelected -= OnBreedSelected;

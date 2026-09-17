@@ -40,7 +40,7 @@ public class ClickerView : MonoBehaviour
         {
             particle.transform.position = _buttonRect.transform.position;
             particle.Play();
-            ReturnParticleToPool(particle);
+            _ = ReturnParticleToPool(particle);
         }
     }
 

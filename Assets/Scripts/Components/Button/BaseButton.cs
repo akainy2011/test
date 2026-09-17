@@ -14,8 +14,6 @@ public class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private Action _clickHandler;
 
-    private bool _isPointerDown;
-
 #if UNITY_EDITOR
     private void Awake()
     {
@@ -33,27 +31,16 @@ public class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private void Start()
     {
         _unityButton.onClick.AddListener(OnUnityButtonClick);
-
-        PerformOnStart();
     }
-
-    protected virtual void PerformOnStart()
-    {
-        // default //
-    }
-
+    
     public void OnPointerDown(PointerEventData eventData)
     {
-        _isPointerDown = true;
-
         if (_unityButton.interactable)
             SetBodyDownState(true);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        _isPointerDown = false;
-
         if (_unityButton.interactable)
             SetBodyDownState(false);
     }
@@ -70,9 +57,6 @@ public class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             return;
         
         PlaySound();
-       
-        PerformOnClick();
-
         _clickHandler?.Invoke();
     }
     
@@ -80,12 +64,7 @@ public class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         _clickSound.Play();
     }
-
-    // позволяет наследному классу выполнять некоторое стандартное действие при клике по любой кнопке этого класса
-    protected virtual void PerformOnClick()
-    {
-        // default //
-    }
+  
 
     public void Lock()
     {
@@ -105,13 +84,7 @@ public class BaseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private void OnDestroy()
     {
-        PerformOnDestroy();
-
         _clickHandler = null;
     }
-
-    protected virtual void PerformOnDestroy()
-    {
-        // default //
-    }
+  
 }

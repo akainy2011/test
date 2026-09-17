@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -22,6 +21,16 @@ public class WeatherView : MonoBehaviour
         _iconImage.sprite = icon;
     }
 
-    public void Show() => gameObject.SetActive(true);
+    public void PlayIdleAnim()
+    {
+         _animator.Play("Idle");
+    }
+
+    public void Show()
+    {
+        PlayIdleAnim();
+        gameObject.SetActive(true);
+    }
+
     public void Hide() => gameObject.SetActive(false);
 }

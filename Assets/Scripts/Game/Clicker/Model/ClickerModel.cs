@@ -10,10 +10,4 @@ public class ClickerModel
         Currency += amount;
         OnCurrencyChanged?.Invoke(Currency);
     }
-
-    public void SetCurrency(int amount)
-    {
-        Currency = amount;
-        OnCurrencyChanged?.Invoke(Currency);
-    }
 }
